@@ -1,5 +1,7 @@
 # How to use
 
+**ONLY PC** ~~of course you can get mobile version, just boring modification~~
+
 Fisrt check your settings page, it should looks like below:
 
 By the way, my desktop resolution is 1920x1080, so if you could just use the resolution👈
