@@ -12,7 +12,7 @@ By the way, my desktop resolution is 1920x1080, so if you could just use the res
 
 ## Steps
 
-1. install requirements, I forgot to add a list or requirements.txt, anyway, just get the point.
+1. ~~install requirements, I forgot to add a list or requirements.txt, anyway, just get the point.~~ Done.
 
 2. run the py file as admin, I guess it would be fine if you install requirements properly.
 
@@ -21,6 +21,8 @@ By the way, my desktop resolution is 1920x1080, so if you could just use the res
 4. I guess nothing.
 
 5. fork and modify code as you like, I rarely read issues.
+
+**NOTICE: KEEP GAME RUNNING FOREGROUND AND NO OBSTRUCTED WHEN YOU WANT IT FISHING**
 
 ## Demo
 
