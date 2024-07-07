@@ -12,17 +12,20 @@ By the way, my desktop resolution is 1920x1080, so if you could just use the res
 
 ## Steps
 
-1. ~~install requirements, I forgot to add a list or requirements.txt, anyway, just get the point.~~ Done.
+1. ~~install requirements, I forgot to add a list or requirements.txt, anyway, just get the point.~~ Done.  
+now just running `pip install -r requirements.txt` (if you use venv or other virtual env, I bet you are good at this)
 
-2. run the py file as admin, I guess it would be fine if you install requirements properly.
+2. run the py file AS ADMIN, I guess it would be fine if you install requirements properly.
 
 3. go to the fishing area and click twice button, script would help you press ⬆⬆⬇⬇⬅⬅➡➡ (only this! do not expect more.)
 
 4. I guess nothing.
 
-5. fork and modify code as you like, I rarely read issues.
+5. If you find code runs badly, I have left extra funcs in script, fork and modify code as you like, I rarely read issues. (For long response time, try moddify number in [L212](https://github.com/iceynano/nikke_fishing/blob/49fff960ba15425bf55e11813b8592bfd3c8e64d/run.py#L212))
 
-**NOTICE: KEEP GAME RUNNING FOREGROUND AND NO OBSTRUCTED WHEN YOU WANT IT FISHING**
+6. USE AT YOUR OWN RISK, if you got banned, I would be glad to advise you play games that don't constrain the use of scripts. 
+
+**NOTICE: KEEP GAME RUNNING FOREGROUND AND WINDOW NO OBSTRUCTED WHEN YOU WANT IT FISHING**
 
 ## Demo
 
