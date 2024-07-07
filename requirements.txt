@@ -1,0 +1,6 @@
+keyboard==0.13.5
+numpy==1.24.3
+opencv_python==4.7.0.72
+Pillow==9.5.0
+PyAutoGUI==0.9.54
+pywin32==306
