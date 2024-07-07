@@ -22,4 +22,5 @@ By the way, my desktop resolution is 1920x1080, so if you could just use the res
 
 ## Demo
 
-https://github.com/iceynano/nikke_fishing/assets/34570144/11e1c04a-96b9-4124-9e86-dd25316552f2
+https://github.com/iceynano/nikke_fishing/assets/34570144/fcb82298-8344-4e6b-832d-6bc271f0a970
+
