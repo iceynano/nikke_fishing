@@ -16,7 +16,7 @@ now script support other resolution, but **1080p** and settings below is still b
 
 1. if you want install manually, just running `pip install -r requirements.txt`. (if you use venv or other virtual env, I bet you are good at this)  
 
-if you use release package, just unzip it then double click `start script.bat`, it would auto install requirements to folder under script.
+    if you use release package, just unzip it then double click `start script.bat`, it would auto install requirements to folder under script.
 
 2. run the py file **AS ADMIN** if you install manually, I guess it would be fine if you install requirements properly.
 
@@ -26,7 +26,7 @@ if you use release package, just unzip it then double click `start script.bat`, 
 
 5. I guess nothing.
 
-6. If you find code runs badly, I have left extra funcs in script, fork and modify code as you like, I rarely read issues. (For long response time, try moddify number in [L287](https://github.com/iceynano/nikke_fishing/blob/49fff960ba15425bf55e11813b8592bfd3c8e64d/run.py#L287))
+6. If you find code runs badly, I have left extra funcs in script, fork and modify code as you like, I rarely read issues. (For long response time, try moddify number in [L287](https://github.com/iceynano/nikke_fishing/blob/4973795cc146055ed41ca677107ed89e07f2e331/run.py#L287))
 
 7. USE AT YOUR OWN RISK, if you got banned, I would be glad to advise you play games that don't constrain the use of scripts. 
 
