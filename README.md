@@ -2,7 +2,7 @@
 
 **ONLY PC** ~~of course you can get mobile version, just boring modification~~
 
-Fisrt check your settings page, it should looks like below:
+Fisrt check your settings page, it should looks like below: (just screen mode and graphic ratio!)
 
 By the way, my desktop resolution is 1920x1080, so if you could just use the resolution👈
 
