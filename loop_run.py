@@ -50,12 +50,13 @@ def assets_initial():
     def fl(file):
         return 'assets\\' + file + '.png'
     for asset in GLASSETS:
-        tmp_asset = [
-            Image.open(fl(img))
-            for img in GLASSETS[asset]
-        ]
-        GLASSETS[asset].clear()
-        GLASSETS[asset] = tmp_asset
+        tmp_asset = {
+            img: Image.open(fl(img))
+            for img in GLASSETS[asset][0]
+        }
+        GLASSETS[asset][0].clear()
+        GLASSETS[asset][0] = tmp_asset
+        GLASSETS[asset].append({})
 
 def scale_template():
     pass
@@ -68,12 +69,12 @@ def scale_asset(assets):
         assets (str): 
             name in GLASSETS
     """
-    cv_asset = [
-        scale_template(asset, GLSCALE)
-        for asset in assets
-    ]
-    GLASSETS[assets].clear()
-    GLASSETS[assets] = copy.copy(cv_asset)
+    cv_asset = {
+        asset: scale_template(asset, GLSCALE)
+        for asset in GLASSETS[assets][0]
+    }
+    GLASSETS[assets][0].clear()
+    GLASSETS[assets][0] = cv_asset
 
 def find_window_by_title(title):
     def callback(hwnd, extra):
@@ -215,8 +216,8 @@ def click_random_in_region(button, tick, sig):
     """
     if time.time() - tick('click') >= 0.1:
         rect = win32gui.GetWindowRect(button.hwnd)
-        abs_x = rect[0] + button.top_left[0] + random.randint(0, button.width - 1)
-        abs_y = rect[1] + button.top_left[1] + random.randint(0, button.height - 1)
+        abs_x = rect[0] + button.top_left[0] + random.randint(5, button.width - 10)
+        abs_y = rect[1] + button.top_left[1] + random.randint(5, button.height - 10)
         pyautogui.click(abs_x, abs_y)
         tick('click', True)
         print(f"Click @{sig} ({abs_x - rect[0]} {abs_y - rect[1]})")
@@ -366,14 +367,18 @@ def handle_up_down(hwnd):
             return
 
 def handle_man_pause(img):
-    template = GLASSETS['ui_button'][3]
-    mp_show = match_template(img, template)
-    return True if mp_show[0] else False
+    template = GLASSETS['ui_button'][0]['mannual_pause']
+    end = GLASSETS['ui_button'][1]['mannual_pause']
+    end: Button
+    img = newcrop(img, end)
+    mp_show = match_template(img, template)[0]
+    return True if mp_show else False
 
 def handle_buoy(hwnd, target='GOLD'):
-    buoy_flag = GLASSETS['ui'][4]
-    buoy_button = Button()
-    buoy_button.img = GLASSETS['ui'][3]
+    buoy_flag = GLASSETS['ui_element'][0]['buoy_flag']
+    bu_bt = GLASSETS['ui_element'][1]
+    bu_bt['buoy_button'] = Button()
+    bu_bt['buoy_button'].img = GLASSETS['ui_element'][0]['buoy_button']
 
     BLUE = (0, 173, 255)
     PURPLE = (207, 81, 255)
@@ -395,12 +400,12 @@ def handle_buoy(hwnd, target='GOLD'):
 
         if handle_man_pause(window_img): return True
 
-        button_lock_on(buoy_button, window_img, buoy_button.img, hwnd)
+        button_lock_on(bu_bt['buoy_button'], window_img, bu_bt['buoy_button'].img, hwnd)
 
-        if buoy_button.show:
+        if bu_bt['buoy_button'].show:
             if not recorded:
-                left = buoy_button.top_left[0] - 50
-                right = buoy_button.top_left[0] + buoy_button.width + 50
+                left = bu_bt['buoy_button'].top_left[0] - 50
+                right = bu_bt['buoy_button'].top_left[0] + bu_bt['buoy_button'].width + 50
                 bottom = win32gui.GetWindowRect(hwnd)[3] - win32gui.GetWindowRect(hwnd)[1]
                 k = (left, 0, right, bottom)
                 recorded = True
@@ -430,25 +435,36 @@ def fishing():
     pass
 
 def handle_loop(hwnd, target):
+    now = id_timer()
     
-    start = Image.open('assets\\start.png')
-    end = Image.open('assets\\end.png')
-    pause = Image.open('assets\\paused.png')
-    begin_fish = Image.open('assets\\begin_fish.png')
-    mannual_pause = Image.open('assets\\mannual_pause.png')
+    # start = GLASSETS['ui_button'][0]['start']
+    # end = GLASSETS['ui_button'][0]['end']
+    # begin_fish = GLASSETS['ui_button'][0]['begin_fish']
+    # mannual_pause = GLASSETS['ui_button'][0]['mannual_pause']
+
+    if not GLASSETS['ui_button'][1]:
+        start = Button()
+        end = Button()
+        begin_fish = Button()
+        mannual_pause = Button()
+        pause = Button()
+
+        sub_dict = GLASSETS['ui_button'][0]
+        end.img, start.img, begin_fish.img, mannual_pause.img = tuple([sub_dict[key] for key in sub_dict.keys()])
+        pause.img = GLASSETS['ui_element'][0].get('paused')
+    else:
+        sub_dict = GLASSETS['ui_button'][1]
+        end, start, begin_fish, mannual_pause = tuple([sub_dict[key] for key in sub_dict.keys()])
+        pause = GLASSETS['ui_element'][1].get('paused')
+
+    flag = 1
+    mp_flag = False
     
     def real_area(button: Button, sig: str):
         offset = 130 if sig == 'end' else (180 if sig == 'start' else 190) 
         button.width = 60 + offset
         return button
-
-    now = id_timer()
-    st = Button()
-    ed = Button()
-    fish_st = Button()
-    flag = 1
-    mp_flag = False
-
+    
     while 1:
         if not hwnd:
             break
@@ -460,57 +476,67 @@ def handle_loop(hwnd, target):
             return
 
         if flag == 1:
-            button_lock_on(st, window_img, start, hwnd)
-            if st.show:
-                st = real_area(st, 'start')
-                click_random_in_region(st, now, 'start')
+            button_lock_on(start, window_img, start.img, hwnd)
+            if start.show:
+                start = real_area(start, 'start')
+                GLASSETS['ui_button'][1]['start'] = start
+                click_random_in_region(start, now, 'start')
                 flag = 2
-                ed.stable = False
-                ed.show = None
+                end.stable = False
+                end.show = None
                 continue
         if flag == 2:
-            if match_template(window_img, pause, False)[0]:
+            back = False
+            if match_template(window_img, pause.img, False)[0]:
+                newpress('esc', now)
+                back = True
+
+            button_lock_on(end, window_img, end.img, hwnd)
+            button_lock_on(mannual_pause, window_img, mannual_pause.img, hwnd)
+
+            if end.show:
+                end = real_area(end, 'end')
+                GLASSETS['ui_button'][1]['end'] = end
+                GLASSETS['ui_button'][1]['mannual_pause'] = mannual_pause
                 flag = 3
+
+                if back: newpress('esc', now); continue
+                click_random_in_region(end, now, 'end')
                 continue
-            else:
-                button_lock_on(ed, window_img, end, hwnd)
-                if ed.show:
-                    ed = real_area(ed, 'end')
-                    click_random_in_region(ed, now, 'end')
-                    flag = 3
-                    continue
         if flag == 3:
-            button_lock_on(fish_st, window_img, begin_fish, hwnd)
-            if fish_st.show:
-                fish_st = real_area(fish_st, 'begin_fish')
-                click_random_in_region(fish_st, now, 'begin_fish')
+            button_lock_on(begin_fish, window_img, begin_fish.img, hwnd)
+            button_lock_on(pause, window_img, pause.img, hwnd)
+            if pause.show:
+                GLASSETS['ui_element'][1]['paused'] = pause
+            if begin_fish.show:
+                GLASSETS['ui_button'][1]['begin_fish'] = begin_fish
+                newpress('space', now)
                 flag = 4
                 continue
         if flag == 4:
             mp_flag = handle_buoy(hwnd, target)
             if mp_flag: continue
 
-            k = ['ui','blue_icon','yellow_icon']
+            k = ['ui_element','blue_icon','yellow_icon']
             templates = [GLASSETS[key] for key in k]
-            mp_flag = fishing(hwnd, templates)
+            mp_flag = handle_fishing(hwnd, templates)
             if mp_flag: continue
 
             flag = 5
-            ed.stable = False
-            ed.show = None
+            end.stable = False
+            end.show = None
             continue
         if flag == 5:
-            button_lock_on(ed, window_img, end, hwnd)
-            if ed.show:
-                ed = real_area(ed, 'end')
-                click_random_in_region(ed, now, 'end')
+            button_lock_on(end, window_img, end.img, hwnd)
+            if end.show:
+                click_random_in_region(end, now, 'end')
                 flag = 1
 
 
-def fishing(hwnd, templates, threshold=0.5):
+def handle_fishing(hwnd, templates, threshold=0.5):
 
-    def fl(file):
-        return 'assets\\' + file + '.png'
+    # def fl(file):
+    #     return 'assets\\' + file + '.png'
 
     # mask_image = [
     #     Image.open(fl(img))
@@ -521,8 +547,11 @@ def fishing(hwnd, templates, threshold=0.5):
     #     Image.open(fl(img))
     #     for img in icons
     # ]
-    mask_image = templates[0]
-    icon_image = templates[1] + templates[2]
+    def ft(dic):
+        return [dic[0][key] for key in dic[0].keys()]
+
+    mask_image = ft(templates[0])
+    icon_image = ft(templates[1]) + ft(templates[2])
     cv = False
     # flag for templates whether converted
     flag = False
@@ -537,7 +566,7 @@ def fishing(hwnd, templates, threshold=0.5):
 
     idfy_area = Button(); idfy_area.no_scale = False; idfy_area.img = mask_image[1]
     buffer_area = Button()
-    pause = Button(); pause.no_scale = False; pause.img = mask_image[0]
+    pause = GLASSETS['ui_element'][1]['paused']; pause.no_scale = False
     endtime = Button()
 
     while 1:
@@ -610,13 +639,13 @@ def fishing(hwnd, templates, threshold=0.5):
 def main():
     window_title = "NIKKE"
     # process_name = 'nikke.exe'
-    ui = ['paused','click_area','end','buoy_button','buoy_flag']
+    ui_element = ['paused','click_area','end','buoy_button','buoy_flag']
     ui_button = ['end','start','begin_fish','mannual_pause']
     bar = ['R_0_t','R_1_t','SR_t','SSR_t']
     blue_icon = ['bleft','bright','bup','bdown']
     yellow_icon = ['yleft','yright','yup','ydown']
     global GLASSETS
-    GLASSETS = {'ui':ui, 'ui_button':ui_button, 'bar':bar, 'blue_icon':blue_icon, 'yellow_icon':yellow_icon}
+    GLASSETS = {'ui_element':[ui_element], 'ui_button':[ui_button], 'bar':[bar], 'blue_icon':[blue_icon], 'yellow_icon':[yellow_icon]}
     assets_initial()
     # templates = [ui, blue_icon, yellow_icon]
     
