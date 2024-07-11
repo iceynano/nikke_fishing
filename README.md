@@ -32,7 +32,19 @@ now script support other resolution, but **1080p** and settings below is still b
 
 **NOTICE: KEEP GAME RUNNING FOREGROUND AND WINDOW NO OBSTRUCTED WHEN YOU WANT IT FISHING**
 
+## Dev branch feature
+
+now script on dev branch has support semi-automatic click, you just need to click one fishing spot in game and wait script woeking, then click next fishing spot as work complete.  
+
+however, it doesn't support scale yet, so it could only work at default setting above. by the way, the performance of script has improved, now fishing won't fail when start first time.
+
+for user still in use main branch, comment out the code L273 would be helpful. if you want to experience dev branch, download dev branch source code and do mannual install with steps above, or just unzip it to cover files in release package folder, then running `python loop_run.py` in console.bat.
+
 ## Demo
 
 https://github.com/iceynano/nikke_fishing/assets/34570144/fcb82298-8344-4e6b-832d-6bc271f0a970
+
+## Demo in dev
+
+https://github.com/iceynano/nikke_fishing/assets/34570144/f733f396-d5b3-4fd0-b5c8-68bdc0f7b3f5
 
