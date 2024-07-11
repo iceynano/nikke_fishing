@@ -2,6 +2,7 @@
 .idea
 /toolkit
 *.lock
+/assets/test
 
 
 # Created by .ignore support plugin (hsz.mobi)
