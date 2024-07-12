@@ -270,7 +270,7 @@ def fishing(hwnd, templates, threshold = 0.5):
 
         window_img = capture_window(hwnd)
 
-        button_lock_on(endtime, window_img, mask_image[2], hwnd)
+        # button_lock_on(endtime, window_img, mask_image[2], hwnd)
         if endtime.show:
             continue
 
