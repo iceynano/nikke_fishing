@@ -85,8 +85,8 @@ def scale_try(image, template):
     template_height, template_width = template.shape[:2]
 
     scale_start = 0.5
-    scale_end = 2.0
-    scale_step = 0.1
+    scale_end = 1.5
+    scale_step = 0.05
 
     best_scale = None
     best_val = float('inf')
