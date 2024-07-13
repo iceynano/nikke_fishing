@@ -443,7 +443,7 @@ def handle_buoy(hwnd, target='SSR'):
             if buoy_color == 'SSR' or not flag:
                 if flag and buoy_coor[1] < area[3] / 2:
                     flag = False
-                if not flag:
+                elif not flag:
                     if buoy_color == target:
                         now = id_timer()
                         print(f"target @{target} found, now execute press")
