@@ -229,7 +229,7 @@ def newpress(sig, tick):
     """
     send press key event for specify sig
     """
-    if time.time() - tick('press') >= 0.2:
+    if time.time() - tick('press') >= 0.1:
         keyboard.press(sig)
         keyboard.release(sig)
         print(f"{sig} pressed!")
@@ -472,7 +472,7 @@ def handle_loop(hwnd, target, mode='random'):
     
     def real_area(button: Button, sig: str):
         if not button.extended:
-            offset = 130 if sig == 'end' else (180 if sig == 'start' else 190) 
+            offset = 130 if sig == 'end' else 180
             button.width = 60 + offset
             button.extended = True
         return button
@@ -527,7 +527,6 @@ def handle_loop(hwnd, target, mode='random'):
             button_lock_on(pause, window_img, pause.img, hwnd)
 
             if begin_fish.show:
-                begin_fish = real_area(begin_fish, 'begin_fish')
                 GLASSETS['ui_button'][1]['begin_fish'] = begin_fish
                 GLASSETS['ui_element'][1]['paused'] = pause
                 newpress('space', now)
