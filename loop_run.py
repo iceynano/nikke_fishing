@@ -441,17 +441,18 @@ def handle_buoy(hwnd, target='SSR'):
 
             buoy_color = pixel_1 if type(pixel_1).__name__ == 'str' else pixel_2
             if buoy_color == 'SSR' or not flag:
-                if flag:
+                if flag and buoy_coor[1] < area[3] / 2:
                     flag = False
-                if buoy_color == target:
-                    now = id_timer()
-                    print(f"target @{target} found, now execute press")
-                    newpress('space', now)
-                    break
+                if not flag:
+                    if buoy_color == target:
+                        now = id_timer()
+                        print(f"target @{target} found, now execute press")
+                        newpress('space', now)
+                        break
 
-                if buoy_color == 'SSR' and buoy_coor[1] > area[3] / 2:
-                    print(f"@{target} not found, fallback to default target")
-                    target = 'SSR'
+                    if buoy_color == 'SSR' and buoy_coor[1] > area[3] / 2:
+                        print(f"@{target} not found, fallback to default target")
+                        target = 'SSR'
 
 def handle_loop(hwnd, target, mode='random'):
     now = id_timer()
