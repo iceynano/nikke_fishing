@@ -4,3 +4,4 @@ opencv_python==4.7.0.72
 Pillow==9.5.0
 PyAutoGUI==0.9.54
 pywin32==306
+psutil==6.0.0
