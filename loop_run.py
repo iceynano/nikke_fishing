@@ -5,6 +5,8 @@ import win32gui
 import time
 import copy
 import random
+import psutil
+import win32process
 from PIL import Image
 import keyboard
 
@@ -89,21 +91,37 @@ def find_window_by_title(title):
     win32gui.EnumWindows(callback, hwnd_list)
     return hwnd_list[0] if hwnd_list else None
 
-# def find_window_by_process(process_name):
-#     # didn't work. need to adjust.
-#     hwnd_list = []
-#     def callback(hwnd, hwnd_list):
-#         if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != "":
-#             _, pid = win32process.GetWindowThreadProcessId(hwnd)
-#             try:
-#                 _, found_process_name = win32process.GetModuleFileNameEx(pid, 0)
-#             except win32process.error:
-#                 found_process_name = None
-#             if found_process_name and found_process_name.lower() == process_name.lower():
-#                 hwnd_list.append(hwnd)
-#         return True
-#     win32gui.EnumWindows(callback, hwnd_list)
-#     return hwnd_list[0] if hwnd_list else None
+def find_window_by_process(process_name, subprocess_name):
+    def find_child_processes(parent_pid):
+        children = []
+        try:
+            parent = psutil.Process(parent_pid)
+            children = parent.children(recursive=True)
+        except psutil.NoSuchProcess:
+            pass
+        return children
+    
+    def callback(hwnd, hwnds):
+        _, process_id = win32process.GetWindowThreadProcessId(hwnd)
+        if process_id == pid and win32gui.IsWindowVisible(hwnd):
+            hwnds.append(hwnd)
+        return True
+    
+    hwnds = []
+    for proc in psutil.process_iter(['pid', 'name']):
+        if proc.info['name'] == process_name:
+            pid = proc.info['pid']
+            child_processes = find_child_processes(pid)
+            find = False
+            for child in child_processes:
+                if child.name() == subprocess_name:
+                    pid = child.pid
+                    find = True
+                    break
+            
+            win32gui.EnumWindows(callback, hwnds)
+
+            return hwnds[0] if hwnds and find else None
 
 def capture_window(hwnd):
     rect = win32gui.GetWindowRect(hwnd)
@@ -669,7 +687,8 @@ def handle_fishing(hwnd, templates, target, mode):
 
 def main():
     window_title = "NIKKE"
-    # process_name = 'nikke.exe'
+    process_name = "nikke_launcher.exe"
+    subprocess_name = 'nikke.exe'
     ui_element = ['paused','click_area','end','buoy_button','buoy_flag']
     ui_button = ['end','start','begin_fish','mannual_pause']
     bar = ['R_0_t','R_1_t','SR_t','SSR_t']
@@ -679,8 +698,8 @@ def main():
     GLASSETS = {'ui_element':[ui_element], 'ui_button':[ui_button], 'bar':[bar], 'blue_icon':[blue_icon], 'yellow_icon':[yellow_icon]}
     assets_initial()
     
-    hwnd = find_window_by_title(window_title)
-    # hwnd = find_window_by_process(process_name)
+    # hwnd = find_window_by_title(window_title)
+    hwnd = find_window_by_process(process_name, subprocess_name)
     if hwnd:
         print(f"Find Window: {hwnd}")
         # fishing(hwnd, templates)
